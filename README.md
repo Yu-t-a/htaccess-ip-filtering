@@ -4,7 +4,7 @@ This project demonstrates how to use Apache's `.htaccess` file with mod_rewrite 
 
 ### Features:
 - **IP-based Access Control**: Restrict access to specific IP addresses (e.g., only allowing localhost).
-- **Referer-based Filtering**: Ensure that traffic is coming from a trusted domain (e.g., only allow requests from `pattaya.go.th`).
+- **Referer-based Filtering**: Ensure that traffic is coming from a trusted domain (e.g., only allow requests from `Domain`).
 - **Custom 403 Page**: Redirect unauthorized users to a custom 403 Forbidden page.
 
 ---
@@ -25,8 +25,10 @@ This project demonstrates how to use Apache's `.htaccess` file with mod_rewrite 
         # Allow localhost
         RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.1$
         
-        # Allow traffic from pattaya.go.th
-        RewriteCond %{HTTP_REFERER} !^https?://(www\.)?pattaya\.go\.th [NC]
+        # Allow traffic from Domain
+        # RewriteCond %{HTTP_REFERER} !^https?://(www\.)?example\.go\.th [NC]
+        RewriteCond %{HTTP_REFERER} !^https?://(www\.)?example\.com [NC]
+
 
         # Redirect all other requests to 403.html
         RewriteRule ^.*$ /403.html [L]
@@ -35,7 +37,7 @@ This project demonstrates how to use Apache's `.htaccess` file with mod_rewrite 
 
     - This configuration will:
         - Allow access from the localhost (`127.0.0.1`).
-        - Allow requests originating from `pattaya.go.th`.
+        - Allow requests originating from `Domain`.
         - Redirect all other unauthorized requests to a custom `403.html` page.
 
 3. **Customizing the 403 Page**:
