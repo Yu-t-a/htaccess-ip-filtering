@@ -51,5 +51,3 @@ This project demonstrates how to use Apache's `.htaccess` file with mod_rewrite 
 
 ---
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
