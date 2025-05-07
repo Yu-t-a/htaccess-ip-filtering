@@ -1,2 +1,55 @@
 # htaccess-ip-filtering
-Explanation: This code uses Apache's mod_rewrite module to prevent access to the website from external sources that are not the IP address 127.0.0.1 (localhost) and do not originate from the webpage pattaya.go.th.  If these conditions are not met, the request will be redirected to the 403.html page (Access Forbidden).
+
+This project demonstrates how to use Apache's `.htaccess` file with mod_rewrite to control access to your website based on IP address and referer.
+
+### Features:
+- **IP-based Access Control**: Restrict access to specific IP addresses (e.g., only allowing localhost).
+- **Referer-based Filtering**: Ensure that traffic is coming from a trusted domain (e.g., only allow requests from `pattaya.go.th`).
+- **Custom 403 Page**: Redirect unauthorized users to a custom 403 Forbidden page.
+
+---
+
+## Setup
+
+1. **Prerequisites**: 
+    - Apache server with `mod_rewrite` enabled.
+    - Access to the `.htaccess` file of your website or directory.
+
+2. **How to Use**:
+    - Place the following code in your `.htaccess` file in the root directory of your website:
+
+    ```apache
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+
+        # Allow localhost
+        RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.1$
+        
+        # Allow traffic from pattaya.go.th
+        RewriteCond %{HTTP_REFERER} !^https?://(www\.)?pattaya\.go\.th [NC]
+
+        # Redirect all other requests to 403.html
+        RewriteRule ^.*$ /403.html [L]
+    </IfModule>
+    ```
+
+    - This configuration will:
+        - Allow access from the localhost (`127.0.0.1`).
+        - Allow requests originating from `pattaya.go.th`.
+        - Redirect all other unauthorized requests to a custom `403.html` page.
+
+3. **Customizing the 403 Page**:
+    - Create a `403.html` page that will be shown when access is denied.
+    - You can place this file in the root directory or wherever you prefer.
+
+---
+
+## Benefits:
+- **Improved Security**: Only allows traffic from trusted sources and blocks unauthorized access.
+- **Prevent Hotlinking**: Restricts access to prevent unwanted traffic or hotlinking from other websites.
+- **Customizable**: Easily adjust the allowed IP addresses and referer domains based on your needs.
+
+---
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
