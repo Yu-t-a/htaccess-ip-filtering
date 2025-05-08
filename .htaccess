@@ -1,1 +1,13 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
 
+    # Allow localhost
+    RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.1$
+    
+    # Allow traffic from Domain
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?example\.com [NC]
+
+
+    # Redirect all other requests to 403.html
+    RewriteRule ^.*$ /403.html [L]
+</IfModule>
