@@ -46,6 +46,79 @@ This project demonstrates how to use Apache's `.htaccess` file with mod_rewrite 
 
 ---
 
+## Setup 2
+# .htaccess Rewrite Rules for Access Control
+
+This `.htaccess` file is used to configure Apache's URL rewriting rules for basic access control, focusing on:
+
+- **Bypassing restrictions for specific file types**
+- **Blocking external access except from a specific domain or localhost**
+
+## 🔧 Configuration Summary
+
+### 1. Enable `mod_rewrite`
+
+The `mod_rewrite` module is activated to allow URL rewriting rules.
+
+```apache
+RewriteEngine On
+```
+
+---
+
+### 2. Allow Access for Specific File Types
+
+Requests to files with the following extensions are **allowed without restriction**:
+
+- `.pdf`, `.PDF`
+- `.png`
+- `.jpg`
+
+```apache
+RewriteCond %{REQUEST_URI} \.(pdf|PDF|png|jpg)$ [NC]
+RewriteRule ^ - [L]
+```
+
+---
+
+### 3. Block All Other Requests Except for:
+
+- Requests from IP `127.0.0.1` (localhost)
+- Requests with a `Referer` from `example.go.th`
+
+If the request fails both conditions, the user is redirected to a `403.html` page.
+
+```apache
+RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.1$
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?example\.go\.th [NC]
+RewriteRule ^.*$ /403.html [L]
+```
+```
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{REQUEST_URI} \.(pdf|PDF|png|jpg)$ [NC]
+    RewriteRule ^ - [L]
+
+    RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.1$
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?example\.go\.th [NC]
+    RewriteRule ^.*$ /403.html [L]
+</IfModule>
+```
+---
+
+## 📁 File Required
+
+Make sure `403.html` exists in your root directory to show the access denied message.
+
+---
+
+## ✅ Example Use Cases
+
+- Protecting internal resources from being accessed by unauthorized sources.
+- Allowing PDF/image downloads while blocking web crawlers or hotlinks.
+- Securing a government or organization portal (`example.go.th` in this case).
+
 ## Benefits:
 - **Improved Security**: Only allows traffic from trusted sources and blocks unauthorized access.
 - **Prevent Hotlinking**: Restricts access to prevent unwanted traffic or hotlinking from other websites.
